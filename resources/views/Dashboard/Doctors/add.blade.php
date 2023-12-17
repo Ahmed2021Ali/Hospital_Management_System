@@ -3,11 +3,10 @@
     <!--Internal Sumoselect css-->
     <link rel="stylesheet" href="{{ URL::asset('Dashboard/plugins/sumoselect/sumoselect-rtl.css') }}">
     <link href="{{ URL::asset('dashboard/plugins/notify/css/notifIt.css') }}" rel="stylesheet" />
-
+@endsection
 @section('title')
     {{ trans('doctors.add_doctor') }}
 @stop
-@endsection
 @section('page-header')
 <!-- breadcrumb -->
 <div class="breadcrumb-header justify-content-between">
@@ -32,13 +31,11 @@
             <div class="card-body">
                 <form action="{{ route('Doctor.store') }}" method="post" autocomplete="off"
                     enctype="multipart/form-data">
-                    {{ csrf_field() }}
+                    @csrf
                     <div class="pd-30 pd-sm-40 bg-gray-200">
-
                         <div class="row row-xs align-items-center mg-b-20">
                             <div class="col-md-1">
-                                <label for="exampleInputEmail1">
-                                    {{ trans('doctors.name') }}</label>
+                                <label for="name">{{ trans('doctors.name') }}</label>
                             </div>
                             <div class="col-md-11 mg-t-5 mg-md-t-0">
                                 <input class="form-control" name="name" type="text">
@@ -75,7 +72,6 @@
                             </div>
                         </div>
 
-
                         <div class="row row-xs align-items-center mg-b-20">
                             <div class="col-md-1">
                                 <label for="exampleInputEmail1">
@@ -103,26 +99,13 @@
                                 <select multiple="multiple" class="testselect2" name="appointments[]">
                                     <option selected value="" selected disabled>-- حدد المواعيد --</option>
                                         @foreach ($appointments as $appointment )
-                                         <option value="{{ $appointment->name }}">{{ $appointment->name }}</option>
+                                         <option value="{{ $appointment->id }}">{{ $appointment->name }}</option>
                                         @endforeach
                                 </select>
 
                             </div>
 
                         </div>
-
-                        <div class="row row-xs align-items-center mg-b-20">
-                            <div class="col-md-1">
-                                <label for="exampleInputEmail1">
-                                    {{ trans('doctors.price') }}</label>
-                            </div>
-
-                            <div class="col-md-11 mg-t-5 mg-md-t-0">
-                                <input class="form-control" name="price" value="0.00" type="text">
-                            </div>
-
-                        </div>
-
 
 
                         <div class="row row-xs align-items-center mg-b-20">
@@ -131,12 +114,10 @@
                                     {{ trans('Doctors.doctor_photo') }}</label>
                             </div>
                             <div class="col-md-11 mg-t-5 mg-md-t-0">
-                                <input type="file" accept="image/*" name="photo" onchange="loadFile(event)">
+                                <input type="file" accept="image/*" name="image" onchange="loadFile(event)">
                                 <img style="border-radius:50%" width="150px" height="150px" id="output" />
                             </div>
                         </div>
-
-
 
                         <button type="submit"
                             class="btn btn-main-primary pd-x-30 mg-r-5 mg-t-5">{{ trans('Doctors.submit') }}</button>

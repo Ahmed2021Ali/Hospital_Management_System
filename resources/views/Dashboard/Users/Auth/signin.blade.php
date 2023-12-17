@@ -7,7 +7,7 @@
     </style>
     <!-- Sidemenu-respoansive-tabs css -->
     <link href="{{ URL::asset('Dashboard/plugins/sidemenu-responsive-tabs/css/sidemenu-responsive-tabs.css') }}"
-        rel="stylesheet">
+          rel="stylesheet">
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -17,7 +17,7 @@
                 <div class="row wd-100p mx-auto text-center">
                     <div class="col-md-12 col-lg-12 col-xl-12 my-auto mx-auto wd-100p">
                         <img src="{{ URL::asset('Dashboard/img/media/login.png') }}"
-                            class="my-auto ht-xl-80p wd-md-100p wd-xl-80p mx-auto" alt="logo">
+                             class="my-auto ht-xl-80p wd-md-100p wd-xl-80p mx-auto" alt="logo">
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                         <div class="row">
                             <div class="col-md-10 col-lg-10 col-xl-9 mx-auto">
                                 <div class="card-sigin">
-                                    <div class="mb-5 d-flex"> <a href="{{ url('/' . ($page = 'index')) }}"><img
+                                    <div class="mb-5 d-flex"><a href="{{ url('/' . ($page = 'index')) }}"><img
                                                 src="{{ URL::asset('Dashboard/img/brand/favicon.png') }}"
                                                 class="sign-favicon ht-40" alt="logo"></a>
                                         <h1 class="main-logo1 ml-1 mr-0 my-auto tx-28">Va<span>le</span>x</h1>
@@ -51,12 +51,12 @@
                                                     for="sectionChooser">{{ trans('Dashboard/login_trans.Select_Enter') }}
                                                 </label>
                                                 <select class="form-control" id="sectionChooser">
-                                                    <option value="" selected disabled>
-                                                        {{ trans('Dashboard/login_trans.Choose_list') }} </option>
-                                                    <option value="patient"> {{ trans('Dashboard/login_trans.user') }}
-                                                    </option>
-                                                    <option value="admin">{{ trans('Dashboard/login_trans.admin') }}
-                                                    </option>
+                                                    <option value="" selected
+                                                            disabled>{{ trans('Dashboard/login_trans.Choose_list') }} </option>
+                                                    <option
+                                                        value="patient"> {{ trans('Dashboard/login_trans.user') }}</option>
+                                                    <option
+                                                        value="admin"> {{ trans('Dashboard/login_trans.admin') }}</option>
                                                 </select>
                                             </div>
 
@@ -66,33 +66,37 @@
                                                 <form method="POST" action="{{ route('login.patient') }}">
                                                     @csrf
                                                     <div class="form-group">
-                                                        <label>{{ trans('Dashboard/login_trans.email') }} </label> <input
-                                                            class="form-control" placeholder="Enter your email"
-                                                            type="email" name="email" :value="old('email')" required
-                                                            autofocus autocomplete="username">
+                                                        <label>{{ trans('Dashboard/login_trans.email') }} </label>
+                                                        <input class="form-control" placeholder="Enter your email"
+                                                               type="email" name="email" :value="old('email')" required
+                                                               autofocus autocomplete="email">
                                                     </div>
                                                     <div class="form-group">
                                                         <label>{{ trans('Dashboard/login_trans.password') }} </label>
                                                         <input class="form-control" placeholder="Enter your password"
-                                                            type="password" name="password" required
-                                                            autocomplete="current-password">
-                                                    </div><button
-                                                        class="btn btn-main-primary btn-block">{{ trans('Dashboard/login_trans.Sign In') }}</button>
+                                                               type="password" name="password" required
+                                                               autocomplete="current-password">
+                                                    </div>
+                                                    <button class="btn btn-main-primary btn-block">{{ trans('Dashboard/login_trans.Sign In') }}</button>
                                                     <div class="row row-xs">
                                                         <div class="col-sm-6">
-                                                            <button class="btn btn-block"><i class="fab fa-facebook-f"></i>
-                                                                {{ trans('Dashboard/login_trans.Signup with Facebook') }}</button>
+                                                            <button class="btn btn-block"><i
+                                                                    class="fab fa-facebook-f"></i>
+                                                                {{ trans('Dashboard/login_trans.Signup with Facebook') }}
+                                                            </button>
                                                         </div>
                                                         <div class="col-sm-6 mg-t-10 mg-sm-t-0">
                                                             <button type="submit" class="btn btn-info btn-block"><i
                                                                     class="fab fa-twitter"></i>
-                                                                {{ trans('Dashboard/login_trans.Signup with Twitter') }}</button>
+                                                                {{ trans('Dashboard/login_trans.Signup with Twitter') }}
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </form>
                                                 <div class="main-signin-footer mt-5">
                                                     <p><a
-                                                            href="">{{ trans('Dashboard/login_trans.Forgot_password') }}?</a>
+                                                            href="">{{ trans('Dashboard/login_trans.Forgot_password') }}
+                                                            ?</a>
                                                     </p>
                                                     <p>{{ trans('Dashboard/login_trans.Do not have an account') }} ? <a
                                                             href="{{ url('/' . ($page = 'signup')) }}">{{ trans('Dashboard/login_trans.Create an Account') }}
@@ -107,7 +111,8 @@
                                                 <form method="POST" action="{{ route('login.admin') }}">
                                                     @csrf
                                                     <div class="form-group">
-                                                        <label>{{ trans('Dashboard/login_trans.email') }} </label> <input
+                                                        <label>{{ trans('Dashboard/login_trans.email') }} </label>
+                                                        <input
                                                             class="form-control" placeholder="Enter your email"
                                                             type="email" name="email" :value="old('email')" required
                                                             autofocus autocomplete="username">
@@ -115,8 +120,8 @@
                                                     <div class="form-group">
                                                         <label>{{ trans('Dashboard/login_trans.password') }} </label>
                                                         <input class="form-control" placeholder="Enter your password"
-                                                            type="password" name="password" required
-                                                            autocomplete="current-password">
+                                                               type="password" name="password" required
+                                                               autocomplete="current-password">
 
                                                         <button
                                                             class="btn btn-main-primary btn-block">{{ trans('Dashboard/login_trans.Sign In') }}</button>
@@ -124,18 +129,21 @@
                                                             <div class="col-sm-6">
                                                                 <button class="btn btn-block"><i
                                                                         class="fab fa-facebook-f"></i>
-                                                                    {{ trans('Dashboard/login_trans.Signup with Facebook') }}</button>
+                                                                    {{ trans('Dashboard/login_trans.Signup with Facebook') }}
+                                                                </button>
                                                             </div>
                                                             <div class="col-sm-6 mg-t-10 mg-sm-t-0">
                                                                 <button type="submit" class="btn btn-info btn-block"><i
                                                                         class="fab fa-twitter"></i>
-                                                                    {{ trans('Dashboard/login_trans.Signup with Twitter') }}</button>
+                                                                    {{ trans('Dashboard/login_trans.Signup with Twitter') }}
+                                                                </button>
                                                             </div>
                                                         </div>
                                                 </form>
                                                 <div class="main-signin-footer mt-5">
                                                     <p><a
-                                                            href="">{{ trans('Dashboard/login_trans.Forgot_password') }}?</a>
+                                                            href="">{{ trans('Dashboard/login_trans.Forgot_password') }}
+                                                            ?</a>
                                                     </p>
                                                     <p>{{ trans('Dashboard/login_trans.Do not have an account') }} ? <a
                                                             href="{{ url('/' . ($page = 'signup')) }}">{{ trans('Dashboard/login_trans.Create an Account') }}
@@ -157,9 +165,9 @@
 @endsection
 @section('js')
     <script>
-        $('#sectionChooser').change(function() {
+        $('#sectionChooser').change(function () {
             var myID = $(this).val();
-            $('.LoginForm').each(function() {
+            $('.LoginForm').each(function () {
                 myID === $(this).attr('id') ? $(this).show() : $(this).hide();
             });
         });

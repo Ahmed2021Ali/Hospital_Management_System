@@ -42,3 +42,4 @@
     <link href="{{URL::asset('Dashboard/css/skin-modes.css')}}" rel="stylesheet" />
 
 @endif
+

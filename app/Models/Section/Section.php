@@ -16,8 +16,20 @@ class Section extends Model
     protected $fillable = ['name','description'];
     public $translatedAttributes = ['name','description'];
 
-    public function doctor()
+    public function doctors()
     {
         return $this->hasMany(Doctor::class);
     }
+    public function getAllSections()
+    {
+        return Section::all();
+    }
+    public function getDoctors($id)
+    {
+        return Section::findOrFail($id)->doctors;
+    }
+
+
+
+
 }

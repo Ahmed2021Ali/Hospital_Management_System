@@ -4,18 +4,13 @@ namespace App\Interfaces\Sections;
 
 interface SectionRepositoryInterface
 {
-          // get All Sections
     public function index();
 
-         // Create Sections
     public function store($request);
 
-        // Update Sections
-    public function update($request,$id);
+    public function update($request,$Section);
 
-        // Update Sections
-    public function destroy($id);
+    public function destroy($Section);
 
-        // get All Sections
-    public function show($id);
+    public function show($Section);
 }

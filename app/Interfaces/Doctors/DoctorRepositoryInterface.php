@@ -4,19 +4,19 @@ namespace App\Interfaces\Doctors;
 
 interface DoctorRepositoryInterface
 {
-    // get  all Doctor
     public function index();
-    // create Doctor
     public function create();
-
-    // store Doctor
     public function store($request);
-    // edit Doctor
-    public function edit($id);
-    // update Doctor
-    public function update($request ,$id);
-    // destroy Doctor
-    public function destroy($id);
-    // selected Doctor
+    public function edit($Doctor);
+    public function update($request ,$Doctor);
+    public function destroy($Doctor);
+    public function deleteSelected($request);
+
+    public function passwordUpdate($request,$Doctor);
+
+    public function statusUpdate($request,$Doctor);
+
+
+
 
 }

@@ -2,49 +2,52 @@
 
 namespace App\Repository\Sections;
 
+use App\Models\Doctor\Doctor;
 use App\Models\Section\Section;
 use App\Interfaces\Sections\SectionRepositoryInterface;
 
 class SectionRepository implements SectionRepositoryInterface
 {
+    public $sections;
+    public function __construct()
+    {
+        $this->sections = new Section();
+    }
 
     public function index()
     {
-      $sections = Section::all();
-      return view('Dashboard.Sections.index',compact('sections'));
+      return view('Dashboard.Sections.index',[
+          'sections' => $this->sections->getAllSections(),
+      ]);
     }
 
     public function store($request)
     {
-        Section::create([
-            'name' => $request->name,
-        ]);
+        Section::create([...$request]);
         session()->flash('add');
-        return redirect()->route('Section.index');
+        return to_route('Section.index');
     }
 
-    public function update($request,$id)
+    public function update($request,$Section)
     {
-        $section = Section::findOrFail($id);
-        $section->update([
-            'name' => $request->name,
-        ]);
+        $Section->update([...$request]);
         session()->flash('edit');
-        return redirect()->route('Section.index');
+        return to_route('Section.index');
     }
 
-    public function destroy($id)
+    public function destroy($Section)
     {
-        Section::findOrFail($id)->delete();
+        $Section->delete();
         session()->flash('delete');
-        return redirect()->route('Section.index');
+        return to_route('Section.index');
     }
-    
-    public function show($id)
+
+    public function show($Section)
     {
-        $doctors =Section::findOrFail($id)->doctors;
-        $section = Section::findOrFail($id);
-        return view('Dashboard.Sections.show_doctors',compact('doctors','section'));
+        return view('Dashboard.Sections.show_doctors',[
+            'doctors' =>$this->sections->getDoctors($Section->id),
+            'section' =>$Section
+        ]);
     }
 
 }

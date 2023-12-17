@@ -2,7 +2,6 @@
 
 namespace App\Repository\Doctors;
 
-use App\Http\traits\media;
 use App\Models\Doctor\Doctor;
 use App\Models\Section\Section;
 use Illuminate\Support\Facades\DB;
@@ -10,101 +9,117 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Appointment\Appointment;
 use App\Interfaces\Doctors\DoctorRepositoryInterface;
 
+
 class DoctorRepository implements DoctorRepositoryInterface
 {
-use media;
+    public $sections;
+    public $appointments;
+    public $doctors;
+
+    public function __construct()
+    {
+        $this->sections = new Section();
+        $this->appointments = new Appointment();
+        $this->doctors = new Doctor();
+    }
+
     public function index()
     {
-      $doctors = Doctor::all();
-      return view('Dashboard.Doctors.index',compact('doctors'));
+      return view('Dashboard.Doctors.index', ['doctors' => $this->doctors->getAllDoctors()]);
     }
+
     public function create()
     {
-        $sections = Section::all();
-        $appointments = Appointment::all();
-        return view('Dashboard.Doctors.add',compact('sections','appointments'));
+        return view('Dashboard.Doctors.add', [
+            'sections' => $this->sections->getAllSections(),
+            'appointments' => $this->appointments->getAllAppointments(),
+        ]);
     }
 
     public function store($request)
     {
-        $photoName = $this->uploadPhoto($request->photo,'doctors');
-        DB::beginTransaction();
-        try {
-
-            $doctors = new Doctor();
-            $doctors->email = $request->email;
-            $doctors->password = Hash::make($request->password);
-            $doctors->section_id = $request->section_id;
-            $doctors->phone = $request->phone;
-            $doctors->price = $request->price;
-            $doctors->image = $photoName;
-            $doctors->status = 1;
-            $doctors->save();
-            // store trans
-            $doctors->name = $request->name;
-            $doctors->appointments =implode(",",$request->appointments);
-            $doctors->save();
-
-            DB::commit();
-            session()->flash('add');
-            return redirect()->route('Doctor.create');
-
-        }
-        catch (\Exception $e) {
-            DB::rollback();
-            $photo_path=public_path('images/doctors/').$photoName;
-            $this->deletePhoto($photo_path);
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-        }
-
-    }
-    public function edit($id)
-    {
-        $doctor = Doctor::where('id',$id)->first();
-        $sections = Section::all();
-        return view('Dashboard.Doctors.edit',compact('sections','doctor'));
+        $doctor=  Doctor::create([
+            'name'=>$request['name'],
+            'email'=>$request['email'],
+            'phone'=>$request['phone'],
+            'section_id'=>$request['section_id'],
+            'password' => Hash::make($request['password']),
+            'image' => isset($request['image']) ? uploadImage($request['image'], 'doctors') : null,
+        ]);
+        $doctor->doctorAppointments()->attach($request['appointments']);
+        session()->flash('add');
+        return to_route('Doctor.create');
     }
 
-    public function update($request ,$id)
+    public function edit($Doctor)
     {
+        return view('Dashboard.Doctors.edit', [
+            'Doctor' => $Doctor,
+            'sections' => $this->sections->getAllSections(),
+            'appointments' => $this->appointments->getAllAppointments(),
+        ]);
+    }
 
-        $doctor = Doctor::findOrFail($id);
-        $appointments =implode(",",$request->appointments);
-        if($request->photo)
-        {
-            $photo_path=public_path('/images/doctors/').$doctor->image;
-            $this->deletePhoto($photo_path);
-            $photoName = $this->uploadPhoto($request->photo,'doctors');
-            $doctor->update([
-                ...$request->except('_token','_method','photo','password','appointments'),
-                'password'=>Hash::make($request->password),
-                'appointments'=> $appointments,
-                'image' => $photoName,
-            ]);
+    public function update($request, $Doctor)
+    {
+        if (isset($request['image']) && $Doctor['image']) {
+            deleteImage($Doctor['image'], 'doctors');
         }
-        else
-        {
-            $doctor->update([
-                ...$request->except('_token','_method','photo','password','appointments'),
-                'password'=>Hash::make($request->password),
-                'appointments'=> $appointments,
-            ]);
+        $Doctor->update([
+            'name'=>$request['name'],
+            'email'=>$request['email'],
+            'phone'=>$request['phone'],
+            'section_id'=>$request['section_id'],
+            'image' => isset($request['image']) ? uploadImage($request['image'],'doctors') : $Doctor->image,
+        ]);
+        $Doctor->doctorAppointments()->sync($request['appointments']);
+        session()->flash('update');
+        return to_route('Doctor.index');
+    }
+
+    public function destroy($Doctor)
+    {
+        if ($Doctor['image']) {
+            deleteImage($Doctor['image'], 'doctors');
         }
+        $Doctor->delete();
+        session()->flash('delete');
+        return redirect()->back();
+    }
+
+    public function deleteSelected($request)
+    {
+        if ($request) {
+            foreach (explode(",", $request) as $doctor_id) {
+                $Doctor = Doctor::where('id', $doctor_id)->first();
+                if ($Doctor['image']) {
+                    deleteImage($Doctor['image'], 'doctors');
+                }
+                $Doctor->delete();
+            }
+        }
+        session()->flash('delete');
+        return to_route('Doctor.index');
+    }
+
+    public function passwordUpdate($request,$Doctor)
+    {
+        $Doctor->password = Hash::make($request['password']);
+        $Doctor->save();
         session()->flash('edit');
-        return redirect()->route('Doctor.index');
+        return redirect()->back();
     }
 
-    public function destroy($id)
+    public function statusUpdate($request,$Doctor)
     {
-
-    $doctor = Doctor::findOrFail($id);
-        if($doctor->image){
-            $photo_path = public_path('/images/doctors/').$doctor->image;
-            $this->deletePhoto($photo_path);
+        if($request == 0) {
+            $Doctor->status=0;
+        }else{
+            $Doctor->status=1;
         }
-    $doctor->delete();
-    session()->flash('delete');
-    return redirect()->route('Doctor.index');
+        $Doctor->save();
+        session()->flash('edit');
+        return redirect()->back();
     }
 
 
