@@ -20,7 +20,7 @@
             <div class="card">
                 <div class="card-body">
                     @livewireStyles
-                    @livewire('group-services.create-group-services')
+                    @livewire('group-services.group-services')
                     @livewireScripts
                 </div>
             </div>

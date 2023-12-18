@@ -54,7 +54,7 @@ Route::group(
 ########################## End  service Route  ###########################################
 
 ########################## Group Liveware Route  ###############################################
-        Route::view('group/Services', 'livewire.group-services.include-livewire')->name('GruopService');
+        Route::view('group/Services', 'livewire.group-services.include-livewire')->name('GroupService');
         Livewire::setUpdateRoute(function ($handle){
             return Route::post('liveewire/update',$handle);
         });
